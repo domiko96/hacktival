@@ -12,6 +12,12 @@ int rValue = 0;
 int gValue = 0;
 int bValue = 0;
 
+byte frameBufferR[NUM_LEDS];
+byte frameBufferG[NUM_LEDS];
+byte frameBufferB[NUM_LEDS];
+
+
+
 // Define the array of leds
 CRGB leds[NUM_LEDS];
 
@@ -21,35 +27,37 @@ void setup() {
 }
 
 void loop() {
+  if(Serial.available()){
+    for(int i = 0; i < NUM_LEDS; i++) {
+      if (Serial.available() >= 11) {
+                // read the incoming byte:
+                rValue = Serial.parseInt();
+                gValue = Serial.parseInt();
+                bValue = Serial.parseInt();
 
-  size_t i = 0;
-  while (i < NUM_LEDS) {
-    if (Serial.available() >= 11) {
-              // read the incoming byte:
-              rValue = Serial.parseInt();
-              gValue = Serial.parseInt();
-              bValue = Serial.parseInt();
+                // say what you got:
+                //Serial.print("I received: ");
+                //Serial.print(rValue);
+                //Serial.print(gValue);
+                //Serial.print(bValue);
+                frameBufferR[i] = rValue;
+                frameBufferG[i] = gValue;
+                frameBufferB[i] = bValue;
+                 //go to next line
 
-              // say what you got:
-              Serial.print("I received: ");
-              Serial.print(rValue);
-              Serial.print(gValue);
-              Serial.print(bValue);
-
-              leds[i].r = rValue;
-              leds[i].g = gValue;
-              leds[i].b = bValue;
-               //go to next line
-              i++;
-
-      }
-  }
-  FastLED.show();
-  Serial.println("Called show");
-  i=0;
+        }
+        for(int i = 0; i < NUM_LEDS; i++){
+          leds[i].r = frameBufferR[i];
+          leds[i].g = frameBufferG[i];
+          leds[i].b = frameBufferB[i];
+        }
 
 
-
+          FastLED.show();
+          Serial.println("Called show");
+    }
+    }
+}
 
 
   // Turn the LED on, then pause
@@ -64,4 +72,3 @@ void loop() {
   //  FastLED.show();
   //  delay(10);
   //}
-}
