@@ -8,6 +8,8 @@
 
 //Pin 11 am Arduino
 #define DATA_PIN D4
+#define GND_PIN D6
+
 
 #define FASTLED_ESP8266_NODEMCU_PIN_ORDER
 //#define CLOCK_PIN 13
